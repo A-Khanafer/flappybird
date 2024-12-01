@@ -10,8 +10,6 @@ public class Main extends JFrame {
 
     private JPanel contentPane;
     private GamePanel gp;
-
-
     /**
      * Launch the application.
      */
@@ -33,7 +31,7 @@ public class Main extends JFrame {
         setTitle("FlappyBird");
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 550, 800);
+        setBounds(100, 100, 500, 675);
         setSize(500, 675);
 
         contentPane = new JPanel();

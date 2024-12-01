@@ -11,17 +11,19 @@ import java.awt.geom.Rectangle2D;
 
 public class Bird implements Drawable {
 
-    private final static double PIXEL_PER_METER = 75.0;
+    public final static double PIXEL_PER_METER = 75.0;
     private double x;
     private double y;
     private double leftUpperCornerX;
     private double leftUpperCornerY;
     private double width;
     private double height;
-    private double verticalVelocity;
+    private double verticalVelocity= -5.427188981;
     private Image image;
     private Area area;
     private Point2D.Double center;
+    private double initialY;
+
 
 
     public Bird(double x, double y, double width, String filePathForImage) {
@@ -31,6 +33,7 @@ public class Bird implements Drawable {
         this.width = width;
         this.height = this.width * 0.72;
         this.image = ImageTools.readImageAndResize(filePathForImage, (int)this.width,  (int)this.height);
+        this.leftUpperCornerX = center.getX() - (width / 2.0);
         createGeometry();
     }
 
@@ -66,22 +69,26 @@ public class Bird implements Drawable {
         this.verticalVelocity = verticalVelocity;
     }
 
-    public void animation(double ticks){
-        double yMeters = center.getY() / PIXEL_PER_METER;
-        yMeters = PhysicsTool.yPositionEquation(ticks, center.y / PIXEL_PER_METER, verticalVelocity);
-        center.y = yMeters * PIXEL_PER_METER;
-        createGeometry();
-        verticalVelocity = PhysicsTool.verticalVelocityEquation(ticks, verticalVelocity);
+    public Point2D.Double getCenter() {
+        return this.center;
+    }
 
+    public double getInitialY() {
+        return initialY;
+    }
+
+    public void setInitialY(double initialY) {
+        this.initialY = initialY;
+    }
+
+    public void animation(double ticks){
+        center.y = PhysicsTool.yPositionEquation(ticks, initialY , verticalVelocity)*PIXEL_PER_METER;
+        createGeometry();
     }
 
     private void createGeometry(){
-
-        leftUpperCornerX = center.getX() - (width / 2.0);
         leftUpperCornerY = center.getY() - (height / 2.0);
-        System.out.println("leftUpperCornerX: " + leftUpperCornerX + " leftUpperCornerY: " + leftUpperCornerY);
         area = new Area(new Rectangle2D.Double(leftUpperCornerX, leftUpperCornerY, width, height));
-
     }
 
 

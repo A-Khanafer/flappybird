@@ -2,9 +2,11 @@ package main;
 
 import entity.Bird;
 import obstacles.Cylinders;
+import utility.ImageTools;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -18,20 +20,24 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public GamePanel(Bird bird) {
-
         this.bird = bird;
         this.keyHandler = new KeyHandler(this.bird);
         this.addKeyListener(this.keyHandler);
         setBackground(Color.GRAY);
-        setSize(new Dimension(800, 600));
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
     }
 
 
     public void paintComponent(Graphics g) {
+
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.YELLOW);
+
+
+        g2d.fill(new Rectangle2D.Double(0, 600, getWidth(), getHeight()));
+        g2d.drawImage(ImageTools.readImageAndResize("topPlatform.png" , 2.0), 0,588 ,null);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         bird.draw(g2d);
     }
@@ -39,21 +45,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-
-
-//        while (animationOn) {
-//            seconds = ((System.nanoTime() - startTime)/1_000_000_000.0);
-//
-//            animateBird(seconds);
-//            repaint();
-//
-//            try {
-//              Thread.sleep(16);
-//            } catch (InterruptedException e) {
-//               throw new RuntimeException(e);
-//            }
-//        }
-
+        while (animationOn) {
+            seconds = ((System.nanoTime() - startTime)/1_000_000_000.0);
+            animateBird(seconds);
+            repaint();
+        }
     }
 
     private void animateBird(double ticks){

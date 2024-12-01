@@ -20,10 +20,8 @@ public class KeyHandler implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 			 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				 bird.setVerticalVelocity(-2.94);
+				 bird.setInitialY(bird.getCenter().getY()/75.0);
 				 GamePanel.startTime = System.nanoTime();
-				 System.out.println(GamePanel.seconds);
-				 System.out.println("jayz");
 		        }
 	}
 
