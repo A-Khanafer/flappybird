@@ -40,7 +40,7 @@ public class Main extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        gp = new GamePanel(new Bird(20/3.0 ,9,55,"bird.png"));
+        gp = new GamePanel(new Bird(20/3.0 ,600,55,"bird.png"));
         gp.setBounds(0, 0, 500, 675);
         contentPane.add(gp);
         gp.setLayout(null);
