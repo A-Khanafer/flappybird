@@ -43,8 +43,6 @@ public class Bird implements Drawable {
         g2d.drawImage(image, (int) leftUpperCornerX, (int) leftUpperCornerY, null);
     }
 
-
-
     public double getX() {
         return x;
     }
