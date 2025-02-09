@@ -12,7 +12,7 @@ public class Platform implements Drawable {
     private int platformWidth;
 
     public Platform() {
-        platformImage = ImageTools.readImageAndResize("topPlatform.png", 2.0);
+        platformImage = ImageTools.readImageAndResize("base.png", 1.0);
         platformWidth = platformImage.getWidth(null);
         xPosition1 = 0;
         xPosition2 = platformWidth - 5;
@@ -20,8 +20,8 @@ public class Platform implements Drawable {
 
     @Override
     public void draw(Graphics2D g2d) {
-        g2d.drawImage(platformImage, xPosition1, 586, null);
-        g2d.drawImage(platformImage, xPosition2 , 586, null);
+        g2d.drawImage(platformImage, xPosition1, 540, null);
+        g2d.drawImage(platformImage, xPosition2 , 540, null);
     }
 
     public void animatePlatform() {

@@ -7,10 +7,12 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener{
 
-	Bird bird;
-
-	public KeyHandler(Bird bird) {
+	private Bird bird;
+	private GamePanel gamePanel;
+	private boolean firstTime = true;
+	public KeyHandler(Bird bird, GamePanel gamePanel) {
 		this.bird = bird;
+		this.gamePanel = gamePanel;
 	}
 	
 	@Override
@@ -20,6 +22,10 @@ public class KeyHandler implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 			 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				 if(firstTime) {
+					 gamePanel.startApp();
+					 firstTime = false;
+				 }
 				 bird.setInitialY(bird.getCenter().getY()/75.0);
 				 GamePanel.startTime = System.nanoTime();
 		        }

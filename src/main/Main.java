@@ -40,11 +40,10 @@ public class Main extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        gp = new GamePanel(new Bird(20/3.0 ,600,55,"bird.png"));
+        gp = new GamePanel(new Bird(20/3.0 ,8,55,"yellowbird-midflap.png"));
         gp.setBounds(0, 0, 500, 675);
         contentPane.add(gp);
         gp.setLayout(null);
-        gp.startApp();
 
     }
 }

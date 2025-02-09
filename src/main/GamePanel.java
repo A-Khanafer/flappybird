@@ -27,12 +27,12 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel(Bird bird) {
         this.bird = bird;
         platform = new Platform();
-        this.keyHandler = new KeyHandler(this.bird);
+        this.keyHandler = new KeyHandler(this.bird , this);
         this.addKeyListener(this.keyHandler);
         setBackground(Color.GRAY);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-        background = ImageTools.readImageAndResize("background.png", 1.4);
+        background = ImageTools.readImageAndResize("background-day.png",1.7);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawImage(background, 0, 0, null);
+        g2d.drawImage(background, 0, -100, null);
         bird.draw(g2d);
         platform.draw(g2d);
     }
@@ -51,23 +51,32 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void run() {
         long lastUpdateTime = System.nanoTime();
+        long targetTime = 1000000000 / 60; // 60 FPS, adjust if you need a different frame rate
         double targetDelta = 0.01;
 
         while (animationOn) {
             long currentTime = System.nanoTime();
             double elapsedTime = (currentTime - lastUpdateTime) / 1_000_000_000.0;
 
-
             seconds = ((currentTime - startTime) / 1_000_000_000.0);
             animateBird(seconds);
-
 
             if (elapsedTime >= targetDelta) {
                 animatePlatform();
                 lastUpdateTime = currentTime;
             }
 
-            repaint();
+            // Only repaint if necessary to avoid unnecessary redraws
+            long sleepTime = targetTime - (currentTime - lastUpdateTime);
+            if (sleepTime > 0) {
+                try {
+                    Thread.sleep(sleepTime / 1000000); // sleep for the remaining time in milliseconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            repaint(); // Call repaint less often, controlled by the sleep time
         }
     }
 
