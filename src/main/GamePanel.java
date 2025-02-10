@@ -41,7 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawImage(background, 0, -100, null);
+        g2d.drawImage(background, 0, -125, null);
         bird.draw(g2d);
         platform.draw(g2d);
     }

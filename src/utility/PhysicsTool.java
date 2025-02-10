@@ -2,7 +2,7 @@ package utility;
 
 public class PhysicsTool {
 
-    public final static double GRAVITY = 15.0;
+    public final static double GRAVITY = 17.0;
 
     public static double yPositionEquation(double ticks, double initialYPosition, double verticalVelocity) {
         double yPosition;

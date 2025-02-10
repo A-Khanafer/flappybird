@@ -14,7 +14,7 @@ public class Bird implements Drawable {
     public final static double PIXEL_PER_METER = 75.0;
     private double x;
     private double y;
-    private double leftUpperCornerX;
+    private final double leftUpperCornerX;
     private double leftUpperCornerY;
     private double width;
     private double height;
@@ -23,7 +23,7 @@ public class Bird implements Drawable {
     private Area area;
     private Point2D.Double center;
     private double initialY;
-
+    private int counter = 0;
 
 
     public Bird(double x, double y, double width, String filePathForImage) {
@@ -80,7 +80,18 @@ public class Bird implements Drawable {
     }
 
     public void animation(double ticks){
+        counter++;
         center.y = PhysicsTool.yPositionEquation(ticks, initialY , verticalVelocity)*PIXEL_PER_METER;
+
+        if(counter <= 5){
+            image = ImageTools.readImageAndResize("yellowbird-upflap.png", (int)this.width,  (int)this.height);
+        }else if(counter <= 10){
+            image = ImageTools.readImageAndResize("yellowbird-midflap.png", (int)this.width,  (int)this.height);
+        }else if(counter <= 15){
+            image = ImageTools.readImageAndResize("yellowbird-downflap.png", (int)this.width,  (int)this.height);
+        }else if(counter == 20){
+            counter = 0;
+        }
         createGeometry();
     }
 
