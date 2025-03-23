@@ -27,8 +27,12 @@ public class KeyHandler implements KeyListener{
 					 firstTime = false;
 				 }
 				 bird.setInitialY(bird.getCenter().getY()/75.0);
-				 GamePanel.startTime = System.nanoTime();
-		        }
+				 gamePanel.setStartTime(System.nanoTime());
+			 }
+
+			 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				 gamePanel.setAnimationOn(false);
+			 }
 	}
 
 	@Override

@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    public static long startTime;
-    public static double seconds;
+    private long startTime;
+    private double seconds;
     private boolean animationOn = false;
     private Bird bird;
     private KeyHandler keyHandler ;
@@ -37,7 +37,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void paintComponent(Graphics g) {
-
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -45,9 +44,6 @@ public class GamePanel extends JPanel implements Runnable {
         bird.draw(g2d);
         platform.draw(g2d);
     }
-
-
-
 
     public void run() {
         long lastUpdateTime = System.nanoTime();
@@ -66,18 +62,22 @@ public class GamePanel extends JPanel implements Runnable {
                 lastUpdateTime = currentTime;
             }
 
-            // Only repaint if necessary to avoid unnecessary redraws
+
             long sleepTime = targetTime - (currentTime - lastUpdateTime);
             if (sleepTime > 0) {
                 try {
-                    Thread.sleep(sleepTime / 1000000); // sleep for the remaining time in milliseconds
+                    Thread.sleep(sleepTime / 1000000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
-            repaint(); // Call repaint less often, controlled by the sleep time
+            repaint();
         }
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
     private void animateBird(double ticks){
@@ -86,6 +86,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void animatePlatform(){
         platform.animatePlatform();
+    }
+
+    public void setAnimationOn(boolean animationOn) {
+        this.animationOn = animationOn;
     }
 
     public void startApp() {

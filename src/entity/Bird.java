@@ -5,9 +5,11 @@ import utility.ImageTools;
 import utility.PhysicsTool;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class Bird implements Drawable {
 
@@ -24,7 +26,9 @@ public class Bird implements Drawable {
     private Point2D.Double center;
     private double initialY;
     private int counter = 0;
-
+    private double rotationAngle = 0.0;
+    private Image[] birdFrames;
+    private int frameIndex =0;
 
     public Bird(double x, double y, double width, String filePathForImage) {
         this.x = x * PIXEL_PER_METER;
@@ -34,65 +38,56 @@ public class Bird implements Drawable {
         this.height = this.width * 0.72;
         this.image = ImageTools.readImageAndResize(filePathForImage, (int)this.width,  (int)this.height);
         this.leftUpperCornerX = center.getX() - (width / 2.0);
+        birdFrames = new Image[]{
+                ImageTools.readImageAndResize("yellowbird-upflap.png", (int) this.width, (int) this.height),
+                ImageTools.readImageAndResize("yellowbird-midflap.png", (int) this.width, (int) this.height),
+                ImageTools.readImageAndResize("yellowbird-downflap.png", (int) this.width, (int) this.height)
+        };
         createGeometry();
     }
 
     @Override
     public void draw(Graphics2D g2d) {
-        g2d.draw(area);
-        g2d.drawImage(image, (int) leftUpperCornerX, (int) leftUpperCornerY, null);
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public double getVerticalVelocity() {
-        return verticalVelocity;
-    }
-
-    public void setVerticalVelocity(double verticalVelocity) {
-        this.verticalVelocity = verticalVelocity;
+        Graphics2D g = (Graphics2D) g2d.create();
+        g.draw(area);
+        g.rotate(Math.toRadians(rotationAngle), center.getX(), center.getY());
+        g.drawImage(image, (int) leftUpperCornerX, (int) leftUpperCornerY, null);
     }
 
     public Point2D.Double getCenter() {
         return this.center;
     }
 
-    public double getInitialY() {
-        return initialY;
-    }
-
     public void setInitialY(double initialY) {
         this.initialY = initialY;
+        System.out.println(initialY);
     }
 
     public void animation(double ticks){
-        counter++;
-        center.y = PhysicsTool.yPositionEquation(ticks, initialY , verticalVelocity)*PIXEL_PER_METER;
+        // Update position based on physics equation
+        center.y = PhysicsTool.yPositionEquation(ticks, initialY , verticalVelocity) * PIXEL_PER_METER;
 
-        if(counter <= 5){
-            image = ImageTools.readImageAndResize("yellowbird-upflap.png", (int)this.width,  (int)this.height);
-        }else if(counter <= 10){
-            image = ImageTools.readImageAndResize("yellowbird-midflap.png", (int)this.width,  (int)this.height);
-        }else if(counter <= 15){
-            image = ImageTools.readImageAndResize("yellowbird-downflap.png", (int)this.width,  (int)this.height);
-        }else if(counter == 20){
-            counter = 0;
-        }
+        // Smooth rotation update
+        updateTilt();
+
+        // Update image animation
+        imageAnimation();
+
+        // Update hitbox
         createGeometry();
+    }
+
+    private void updateTilt() {
+        double targetAngle;
+
+        if (center.getY()/75.0 < initialY) {
+            targetAngle = -25; // Tilt upwards
+            rotationAngle += (targetAngle - rotationAngle) * 0.2;
+        } else {
+            targetAngle = 90;  // Tilt downwards
+            rotationAngle += (targetAngle - rotationAngle) * 0.15;
+        }
+
     }
 
     private void createGeometry(){
@@ -100,5 +95,17 @@ public class Bird implements Drawable {
         area = new Area(new Rectangle2D.Double(leftUpperCornerX, leftUpperCornerY, width, height));
     }
 
+    private void imageAnimation(){
+        counter++;
+
+        if (counter % 15 == 0) { // Change frame every 20 ticks (≈166ms at 120 FPS)
+            frameIndex = (frameIndex + 1) % birdFrames.length;
+            image = birdFrames[frameIndex]; // Switch to next frame
+        }
+
+        if (counter >= 60) { // Reset periodically to prevent overflow
+            counter = 0;
+        }
+    }
 
 }
