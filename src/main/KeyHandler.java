@@ -30,8 +30,10 @@ public class KeyHandler implements KeyListener{
 				 gamePanel.setStartTime(System.nanoTime());
 			 }
 
-			 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			 if (e.getKeyCode() == KeyEvent.VK_ESCAPE && gamePanel.isAnimationOn()) {
 				 gamePanel.setAnimationOn(false);
+			 }else if (e.getKeyCode() == KeyEvent.VK_ESCAPE && !gamePanel.isAnimationOn()) {
+				 gamePanel.startApp();
 			 }
 	}
 

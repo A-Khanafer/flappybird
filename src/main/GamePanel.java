@@ -7,6 +7,7 @@ import utility.ImageTools;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
     private boolean initialised = false;
     private Image background;
     private Platform platform;
+    private Cylinders cylinder;
 
 
     public GamePanel(Bird bird) {
@@ -33,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         background = ImageTools.readImageAndResize("background-day.png",1.7);
+        cylinder = new Cylinders();
     }
 
     @Override
@@ -41,27 +44,30 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.drawImage(background, 0, -125, null);
+        cylinder.draw(g2d);
         bird.draw(g2d);
         platform.draw(g2d);
     }
 
     public void run() {
+
         long lastUpdateTime = System.nanoTime();
-        long targetTime = 1000000000 / 60; // 60 FPS, adjust if you need a different frame rate
+        long targetTime = 1000000000 / 120;
         double targetDelta = 0.01;
 
         while (animationOn) {
+            collisionCheck();
             long currentTime = System.nanoTime();
             double elapsedTime = (currentTime - lastUpdateTime) / 1_000_000_000.0;
 
             seconds = ((currentTime - startTime) / 1_000_000_000.0);
-            animateBird(seconds);
 
             if (elapsedTime >= targetDelta) {
+                cylinder.animate();
+                animateBird(seconds);
                 animatePlatform();
                 lastUpdateTime = currentTime;
             }
-
 
             long sleepTime = targetTime - (currentTime - lastUpdateTime);
             if (sleepTime > 0) {
@@ -76,6 +82,11 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    private void collisionCheck() {
+        if(bird.contains(555))
+            animationOn = false;
+    }
+
     public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
@@ -86,6 +97,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void animatePlatform(){
         platform.animatePlatform();
+    }
+
+    public boolean isAnimationOn() {
+        return animationOn;
     }
 
     public void setAnimationOn(boolean animationOn) {

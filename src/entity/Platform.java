@@ -6,11 +6,11 @@ import utility.ImageTools;
 import java.awt.*;
 
 public class Platform implements Drawable {
-    private Image platformImage;
+    private final Image platformImage;
     private int xPosition1;
     private int xPosition2;
     private int xPosition3;
-    private int platformWidth;
+    private final int platformWidth;
 
     public Platform() {
         platformImage = ImageTools.readImageAndResize("base.png", 1.0);
@@ -23,15 +23,16 @@ public class Platform implements Drawable {
 
     @Override
     public void draw(Graphics2D g2d) {
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.drawImage(platformImage, xPosition1, 560, null);
         g2d.drawImage(platformImage, xPosition2 , 560, null);
         g2d.drawImage(platformImage, xPosition3 , 560, null);
     }
 
     public void animatePlatform() {
-        xPosition1 -= 3;
-        xPosition2 -= 3;
-        xPosition3 -= 3;
+        xPosition1 -= 2;
+        xPosition2 -= 2;
+        xPosition3 -= 2;
 
         if (xPosition1 <= -platformWidth) {
             xPosition1 = xPosition3 + platformWidth;
