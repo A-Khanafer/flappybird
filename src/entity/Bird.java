@@ -23,7 +23,7 @@ public class Bird implements Drawable {
     private Point2D.Double center;
     private double initialY;
     private int counter = 0;
-    private double rotationAngle = 0.0;
+    private double rotationAngle = -25;
     private final Image[] birdFrames;
     private int frameIndex =0;
 
@@ -83,12 +83,11 @@ public class Bird implements Drawable {
         double targetAngle;
 
         if (center.getY()/75.0 < initialY) {
-            targetAngle = -25; // Tilt upwards
-            rotationAngle += (targetAngle - rotationAngle) * 0.2;
+            targetAngle = -25;
         } else {
-            targetAngle = 90;  // Tilt downwards
-            rotationAngle += (targetAngle - rotationAngle) * 0.15;
+            targetAngle = 90;
         }
+        rotationAngle += (targetAngle - rotationAngle) * 0.1;
 
     }
 
