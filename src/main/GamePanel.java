@@ -2,13 +2,12 @@ package main;
 
 import entity.Bird;
 import entity.Platform;
-import obstacles.Cylinder;
 import obstacles.CylinderList;
 import utility.ImageTools;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+
 
 public class GamePanel extends JPanel implements Runnable {
 

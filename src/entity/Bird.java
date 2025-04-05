@@ -5,11 +5,9 @@ import utility.ImageTools;
 import utility.PhysicsTool;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 public class Bird implements Drawable {
 
@@ -20,7 +18,7 @@ public class Bird implements Drawable {
     private final double height;
     private Image image;
     private Area area;
-    private Point2D.Double center;
+    private final Point2D.Double center;
     private double initialY;
     private int counter = 0;
     private double rotationAngle = -25;
